@@ -1,5 +1,7 @@
 ## Malicious Web Traffic Analysis Challenge
 **Posted by Anthony | Cybersecurity Analyst | April 2025**
+
+[Completion Badge](https://app.letsdefend.io/my-rewards/detail/120ce9cd-7e0d-4075-bb4b-dc5eb5fe6131)
 ## 🛠️ Tools Used
 
 ![Wireshark](https://img.shields.io/badge/Wireshark-005CAD?style=for-the-badge&logo=wireshark&logoColor=white)
