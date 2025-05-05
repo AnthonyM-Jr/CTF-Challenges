@@ -24,7 +24,7 @@ Welcome to this **question-by-question walkthrough** of the _Compromised AI Clus
 ✅ **Answer:** `Ray`
 
 ![Q1](https://github.com/user-attachments/assets/df3befdf-c6b5-4a9f-8154-50de8febc4b9)
-The software framework is identified in the initial summary. Additionally, its presence was confirmed in searching for the answer to question 2.
+The software framework is identified in the initial summary. Additionally, its presence was confirmed during the search for the answer to question 2.
 
 ---
 
