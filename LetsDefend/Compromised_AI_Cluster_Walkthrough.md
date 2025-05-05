@@ -3,7 +3,7 @@
 
 Welcome to this **question-by-question walkthrough** of the _Compromised AI Cluster_ challenge created by [LetsDefend](https://letsdefend.io)🛡️ In this scenario, we’re diving into an incident involving an AI infrastructure running **Ray**—an open-source distributed computing framework for AI/ML workloads.
 
-> 🎯 **Objective:** Analyze a PCAP file, identify attacker behavior and extract indicators of compromise (IOCs)
+> 🎯 **Objective:** Analyze a PCAP file, identify attacker behavior and extract indicators of compromise (IOCs). There are 14 challenge questions that must be answered to complete the challenge. 
 
 ---
 
@@ -225,13 +225,12 @@ Throughout the investigation I noticed a high number of SYN packets from `104.28
 📌 **Never expose dev/admin dashboards to the public.**  
 📌 Monitor job submissions and API abuse.  
 📌 Use firewall rules to restrict access to sensitive ports.  
-📌 Watch for abnormal outbound connections (reverse shells, high SYN count).
 
 ---
 
 ## 🚨 Indicators of Compromise (IOCs)
 
-| 🔎 Type           | 🧾 Value                           |
+| Type           | Value                           |
 |------------------|------------------------------------|
 | Attacker IPs     | 104.28.245.2, 104.28.213.2, 104.28.154.194 |
 | CVE Exploited    | CVE-2023-48022                    |
@@ -241,4 +240,4 @@ Throughout the investigation I noticed a high number of SYN packets from `104.28
 
 ---
 
-Thanks for reading! If this helped you solve the challenge, consider giving it a ⭐ on GitHub or sharing with your fellow defenders! 💪🛡️
+Thanks for reading!
