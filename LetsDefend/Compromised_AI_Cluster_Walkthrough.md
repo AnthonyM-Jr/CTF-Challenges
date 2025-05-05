@@ -3,7 +3,9 @@
 
 Welcome to this **question-by-question walkthrough** of the _Compromised AI Cluster_ challenge created by [LetsDefend](https://letsdefend.io)🛡️ In this scenario, we’re diving into an incident involving an AI infrastructure running **Ray**—an open-source distributed computing framework for AI/ML workloads.
 
-> 🎯 **Objective:** Analyze a PCAP file, identify attacker behavior and extract indicators of compromise (IOCs). There are 14 challenge questions that must be answered to complete the challenge. 
+**Objective:** 
+- Analyze a PCAP file, identify attacker behavior and extract indicators of compromise (IOCs)
+- Answer 14 challenge questions to complete the challenge. 
 
 ---
 
