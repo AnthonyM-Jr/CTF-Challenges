@@ -24,7 +24,7 @@ Welcome to this **question-by-question walkthrough** of the _Compromised AI Clus
 ✅ **Answer:** `Ray`
 
 ![Q1](https://github.com/user-attachments/assets/df3befdf-c6b5-4a9f-8154-50de8febc4b9)
-The software framework is identified in the initial summary. Additionally, its presence was confirmed during the search for the answer to question 2.
+The software framework is identified in the initial summary. Additionally, its presence was confirmed during the search for the answer to the next question.
 
 ---
 
@@ -222,11 +222,12 @@ Throughout the investigation I noticed a high number of SYN packets from `104.28
 
 ---
 
-## 🧠 Lessons Learned
+## 🧠 Important Lessons Learned
 
-📌 **Never expose dev/admin dashboards to the public.**  
-📌 Monitor job submissions and API abuse.  
-📌 Use firewall rules to restrict access to sensitive ports.  
+- Patch critical vulnerabilities like CVE-2023-48022
+- Avoid exposing dev/admin interfaces to the public
+- Monitor job submissions and API abuse
+- Use firewall rules to restrict access to sensitive ports
 
 ---
 
@@ -242,4 +243,4 @@ Throughout the investigation I noticed a high number of SYN packets from `104.28
 
 ---
 
-Thanks for reading!
+Thanks for reading! Hope it helps you with completing the challenge!
