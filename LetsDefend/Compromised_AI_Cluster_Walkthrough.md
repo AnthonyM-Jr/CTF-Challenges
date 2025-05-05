@@ -5,7 +5,7 @@ Welcome to this **question-by-question walkthrough** of the _Compromised AI Clus
 
 **Objective:** 
 - Analyze a PCAP file, identify attacker behavior and extract indicators of compromise (IOCs)
-- Answer 14 challenge questions to complete the challenge. 
+- Answer 14 challenge questions to complete the challenge
 
 ---
 
