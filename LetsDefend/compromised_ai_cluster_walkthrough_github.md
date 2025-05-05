@@ -1,17 +1,17 @@
 
-# 🧠💥 Let’sDefend Walkthrough – Compromised AI Cluster Challenge
+# 🧠💥 LetsDefend Walkthrough – Compromised AI Cluster Challenge
 
-Welcome to this **step-by-step walkthrough** of the _Compromised AI Cluster_ challenge on [Let’sDefend](https://letsdefend.io)! 🛡️ In this scenario, we’re diving into an incident involving an AI infrastructure running **Ray**—an open-source distributed computing framework.
+Welcome to this **step-by-step walkthrough** of the _Compromised AI Cluster_ challenge on [LetsDefend](https://letsdefend.io)! 🛡️ In this scenario, we’re diving into an incident involving an AI infrastructure running **Ray**—an open-source distributed computing framework for AI/ML workloads.
 
-> 🎯 **Objective:** Analyze the PCAP, identify attacker behavior, and extract indicators of compromise (IOCs).
+> 🎯 **Objective:** Analyze a PCAP file, identify attacker behavior, and extract indicators of compromise (IOCs).
 
 ---
 
 ## 🧰 Tools Used
 
-- 🕵️‍♂️ **Wireshark** – for network packet analysis
-- 🎯 **HTTP protocol knowledge** – to interpret requests/responses
-- 🧹 **Filters & Search** – to extract relevant activity
+- **Wireshark** – for network packet analysis
+- **HTTP protocol knowledge** – to interpret requests/responses
+- **Filters & Search** – to extract relevant activity
 
 ---
 
@@ -19,9 +19,13 @@ Welcome to this **step-by-step walkthrough** of the _Compromised AI Cluster_ cha
 
 **📝 Question:** What software framework was active on the server at the time of the incident?
 
-📡 After opening the PCAP in Wireshark and examining HTTP request paths and payloads, I saw multiple references to `/api/jobs`—a Ray dashboard feature.
-
 ✅ **Answer:** `Ray`
+
+![Q1](https://github.com/user-attachments/assets/df3befdf-c6b5-4a9f-8154-50de8febc4b9)
+`The software framework is identified in the initial summary. Additionally, its presence was confirmed in searching for the answer to question 2.`
+
+
+
 
 ---
 
@@ -29,15 +33,19 @@ Welcome to this **step-by-step walkthrough** of the _Compromised AI Cluster_ cha
 
 **📝 Question:** What version of the software framework was installed?
 
+✅ **Answer:** `2.8.0`
+
 🔍 Filter used:
 
 ```
-http contains "version"
+Searched for the string "Version"
 ```
+![Q2](https://github.com/user-attachments/assets/7392ab81-73d3-4fb7-a185-96c342cddac4)
 
-📄 Found version number in HTTP response payload.
 
-✅ **Answer:** `2.8.0`
+`Found version number in an HTTP response payload.`
+
+
 
 ---
 
@@ -45,9 +53,14 @@ http contains "version"
 
 **📝 Question:** What is the public IP address and port?
 
-Look for the `Host:` header in HTTP requests.
-
 ✅ **Answer:** `3.72.0.226:8265`
+
+In HTTP request headers, the `Host:` field revealed the external IP and port where the Ray dashboard was publicly accessible.
+
+![Q3](https://github.com/user-attachments/assets/16b01e34-4ee4-445e-bcde-8ea2dfbb8338)
+
+
+
 
 ---
 
@@ -55,9 +68,21 @@ Look for the `Host:` header in HTTP requests.
 
 **📝 Question:** Which IP persistently accessed the dashboard?
 
-Filtered `/api/jobs`, `/api/packages`, etc.
-
 ✅ **Answer:** `104.28.245.2`
+
+![Q4](https://github.com/user-attachments/assets/43b9499c-8074-42cb-a62d-e5061679cb3a)
+
+
+
+I filtered through the HTTP traffic and noticed an IP `(104.28.245.2)` repeatedly accessing:
+
+- `/api/packages`
+
+- `/api/jobs`
+
+- `/api/version`
+
+Additionally, I noticed the use of a `/usr/bin/pwd` command in conjunction with the `/api/jobs` request, which lead me to believe the actor was conducting reconnaissance for exploitation:
 
 ---
 
