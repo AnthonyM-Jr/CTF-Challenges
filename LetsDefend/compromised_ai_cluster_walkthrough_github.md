@@ -124,6 +124,8 @@ http.request.method == "POST" && http contains "/api/jobs"
 
 ✅ **Answer:** `CVE-2023-48022`
 
+![Q7](https://github.com/user-attachments/assets/860a2986-d530-43eb-a96b-01d43632c9d7)
+
 During the process of reviewing all of the traffic from attacker IP 104.28.213.2, I discovered a malicious PUT request, containing a Python reverse shell script (reverseShell.py) embedded directly within the request body. The comments in the script made it clear that this was a proof-of-concept that had been weaponized to target CVE-2023-3676. This is a known vulnerability in Ray that allows remote attackers to execute arbitrary code by submitting crafted jobs to an exposed Ray Dashboard API. The exploit bypasses authentication and uses the job submission feature to execute the payload on the cluster node.
 
 
@@ -133,13 +135,10 @@ During the process of reviewing all of the traffic from attacker IP 104.28.213.2
 
 **📝 Question:** What was the first command run?
 
-👨‍💻 Job payload:
-
-```python
-import os; os.system('whoami')
-```
-
 ✅ **Answer:** `whoami`
+
+![Q8](https://github.com/user-attachments/assets/3e7e8599-222d-4648-870b-11a8f49b2bac)
+
 
 ---
 
