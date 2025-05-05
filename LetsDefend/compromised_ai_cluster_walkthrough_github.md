@@ -76,7 +76,7 @@ In HTTP request headers, the `Host:` field revealed the external IP and port whe
 
 I filtered through the HTTP traffic and noticed an IP `(104.28.245.2)` repeatedly accessing:
 
-- `/api/packages`
+- `/api/packages` 
 
 - `/api/jobs`
 
@@ -90,9 +90,11 @@ Additionally, I noticed the use of a `/usr/bin/pwd` command in conjunction with 
 
 **📝 Question:** When did attacker first interact with the system?
 
-Filtered for ICMP packets and located first ping.
-
 ✅ **Answer:** `2024-04-12 15:51:41 UTC`
+
+![Q5](https://github.com/user-attachments/assets/a8b9f996-71bb-4a51-a1f8-ffb634613c38)
+
+At this point in the investigation, I had noticed that three IP addresses shared the same first two octets `(104.28.x.x)`, suggesting they might be related or part of the same infrastructure. To explore this lead, I filtered the logs for activity from these three IPs. **This helped me identify the earliest interaction — an ICMP packet from 104.28.154.194 — which occurred on 2024-04-12 15:51:41 UTC.** Although this IP was different from the one I previously confirmed as persistently malicious, the shared prefix indicated a likely connection between them and helped trace the attacker’s initial footprint.
 
 ---
 
@@ -100,19 +102,19 @@ Filtered for ICMP packets and located first ping.
 
 **📝 Question:** What is the first job submission ID?
 
-Used:
+✅ **Answer:** `raysubmit_kkeJ8vLuM942ycqH`
+
+Filter Used:
 
 ```
 http.request.method == "POST" && http contains "/api/jobs"
 ```
 
-📦 Payload:
+![Q6](https://github.com/user-attachments/assets/680f9832-3834-458c-b08f-89b8f3deb821)
 
-```json
-"submission_id": "raysubmit_kkeJ8vLuM942ycqH"
-```
+`The first observed job submission resulting from attacker activity was associated with the submission ID raysubmit_kkeJ8vLuM942ycqH. This was triggered by a POST request from the attacker IP 104.28.213.2, marking the point at which the adversary began interacting more directly with the system’s job handling functionality.`
 
-✅ **Answer:** `raysubmit_kkeJ8vLuM942ycqH`
+**Discussion on the preceding POST request in question 8!**
 
 ---
 
@@ -120,9 +122,10 @@ http.request.method == "POST" && http contains "/api/jobs"
 
 **📝 Question:** What vulnerability was used?
 
-Attackers submitted jobs to Ray via its unauthenticated dashboard API—a known issue:
-
 ✅ **Answer:** `CVE-2023-48022`
+
+During the process of reviewing all of the traffic from attacker IP 104.28.213.2, I discovered a malicious PUT request, containing a Python reverse shell script (reverseShell.py) embedded directly within the request body. The comments in the script made it clear that this was a proof-of-concept that had been weaponized to target CVE-2023-3676. This is a known vulnerability in Ray that allows remote attackers to execute arbitrary code by submitting crafted jobs to an exposed Ray Dashboard API. The exploit bypasses authentication and uses the job submission feature to execute the payload on the cluster node.
+
 
 ---
 
