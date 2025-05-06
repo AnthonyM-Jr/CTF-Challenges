@@ -1,5 +1,5 @@
 
-# LetsDefend Walkthrough – Compromised AI Cluster
+# LetsDefend Walkthrough – _Compromised AI Cluster_
 **Posted by Anthony | Cybersecurity Analyst | May 2025**
 
 Welcome to this **question-by-question walkthrough** of the _Compromised AI Cluster_ challenge created by [LetsDefend](https://letsdefend.io)🛡️ In this scenario, we’re diving into a compromise involving an AI infrastructure running **Ray**—an open-source distributed computing framework for AI/ML workloads.
