@@ -13,8 +13,6 @@ Welcome to this **question-by-question walkthrough** of the _Compromised AI Clus
 ## 🧰 Tools Used
 
 ![Wireshark](https://img.shields.io/badge/Wireshark-005CAD?style=for-the-badge&logo=wireshark&logoColor=white)
-- **HTTP protocol knowledge** – to interpret requests/responses
-- **Filters & Search** – to extract relevant activity
 
 ---
 
