@@ -12,7 +12,7 @@ Welcome to this **question-by-question walkthrough** of the _Compromised AI Clus
 
 ## 🧰 Tools Used
 
-- **Wireshark** – for network packet analysis
+![Wireshark](https://img.shields.io/badge/Wireshark-005CAD?style=for-the-badge&logo=wireshark&logoColor=white)
 - **HTTP protocol knowledge** – to interpret requests/responses
 - **Filters & Search** – to extract relevant activity
 
@@ -245,3 +245,5 @@ Throughout the investigation I noticed a high number of SYN packets from `104.28
 ---
 
 Thanks for reading! Hope it helps you with completing the challenge!
+
+[Completion Badge](https://app.letsdefend.io/my-rewards/detail/53f3b451-5fc1-4c62-985f-5cdbeeb702ba)
