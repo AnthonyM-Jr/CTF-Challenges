@@ -242,6 +242,19 @@ Throughout the investigation I noticed a high number of SYN packets from `104.28
 
 ---
 
+## 🔗 Cyber Kill Chain Mapping – Compromised AI Cluster
+
+| Kill Chain Phase       | Description |
+|------------------------|-------------|
+| **1. Reconnaissance**  | Attacker scans and discovers the exposed Ray Dashboard. Unauthenticated access to `/api/version` reveals Ray version `2.8.0`. |
+| **2. Weaponization**   | A Python reverse shell payload is prepared and embedded in a Ray job submission exploiting CVE-2023-48022. |
+| **3. Delivery**        | Payload is delivered via a `POST` request to `/api/jobs` from IP `104.28.213.2`. |
+| **4. Exploitation**    | Ray executes the submitted job without authentication, running commands like `whoami` to verify access. |
+| **5. Installation**    | The reverse shell is executed, providing the attacker with a remote session on the system. |
+| **6. Command & Control** | A connection is established to `52.150.25.174:1337`, allowing interactive command execution. |
+| **7. Actions on Objectives** | File `secret.txt` is exfiltrated using another job submission (`raysubmit_7WZE36LAkVxbNc1x`) from IP `104.28.213.2`. |
+
+---
 Thanks for reading! Hope it helps you with completing the challenge!
 
 [Completion Badge](https://app.letsdefend.io/my-rewards/detail/53f3b451-5fc1-4c62-985f-5cdbeeb702ba)
